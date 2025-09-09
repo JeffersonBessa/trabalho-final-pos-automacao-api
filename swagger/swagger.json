@@ -1,0 +1,161 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API PIX - Automação de Testes",
+    "version": "1.0.0",
+    "description": "API para registro, login, consulta de saldo, extrato e transações PIX."
+  },
+  "paths": {
+    "/users/register": {
+      "post": {
+        "summary": "Registrar usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" },
+                  "pixKey": { "type": "string" }
+                },
+                "required": ["username", "password", "pixKey"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário registrado" },
+          "409": { "description": "Usuário ou chave PIX já existe" },
+          "400": { "description": "Dados obrigatórios ausentes" }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login de usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                },
+                "required": ["username", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login realizado" },
+          "401": { "description": "Credenciais inválidas" },
+          "400": { "description": "Dados obrigatórios ausentes" }
+        }
+      }
+    },
+    "/users/balance": {
+      "get": {
+        "summary": "Consulta de saldo",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" }
+                },
+                "required": ["username"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Saldo retornado" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    },
+    "/users/statement": {
+      "get": {
+        "summary": "Consulta de extrato (últimos 30 dias)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" }
+                },
+                "required": ["username"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Extrato retornado" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    },
+    "/pix/pay": {
+      "post": {
+        "summary": "Pagamento PIX",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "amount": { "type": "number" },
+                  "pixKey": { "type": "string" }
+                },
+                "required": ["username", "amount", "pixKey"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Pagamento realizado" },
+          "400": { "description": "Saldo insuficiente ou dados ausentes" },
+          "404": { "description": "Usuário ou recebedor não encontrado" },
+          "429": { "description": "Limite de transações excedido" }
+        }
+      }
+    },
+    "/pix/receive": {
+      "post": {
+        "summary": "Recebimento PIX",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": { "type": "string" },
+                  "amount": { "type": "number" },
+                  "pixKey": { "type": "string" }
+                },
+                "required": ["username", "amount", "pixKey"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Valor recebido" },
+          "400": { "description": "Dados ausentes ou chave PIX inválida" },
+          "404": { "description": "Usuário não encontrado" },
+          "429": { "description": "Limite de transações excedido" }
+        }
+      }
+    }
+  }
+}

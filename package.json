@@ -1,0 +1,17 @@
+{
+  "name": "trabalho-final-pos-automacao-api",
+  "version": "1.0.0",
+  "description": "Esta API permite registro e login de usuários, consulta de saldo, extrato e realização de transações PIX (pagamento e recebimento). O banco de dados é em memória, ideal para aprendizado de testes automatizados.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
