@@ -5,7 +5,7 @@ const { expect } = require('chai');
 const app = require('../../app');
 
 describe('Pix Controller Tests', () =>{
-    describe('Testes para registro, login, consulta de saldo, extrato e transações PIX.', () =>{
+    describe('Testes para registro, login, consulta de saldo, extrato e transações PIX - Camada Controller', () =>{
       it('Quando registro um usuário válido o retorno será 201', async () =>{
         const resposta = await request(app)
                 .post('/users/register')
