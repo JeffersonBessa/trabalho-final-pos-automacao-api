@@ -92,25 +92,6 @@ describe('Pix Controller Tests', () =>{
             .send({ 
                     username: "user3", 
                     password: "123", 
-                    pixKey: "11111111111"
-                 });
-        const resposta = await request(app)
-            .post('/users/login')
-            .send({ 
-                    username: "user3", 
-                    password: "wrong password" 
-                 });
-
-               expect(resposta.status).to.equal(401);
-               expect(resposta.body).to.have.property('message', 'Invalid credentials.');
-      });
-
-      it('Quando tento logar com credenciais inválidas o retorno será 401', async () => {
-        await request(app)
-            .post('/users/register')
-            .send({ 
-                    username: "user3", 
-                    password: "123", 
                     pixKey: "11111111111" 
                  });
         const resposta = await request(app)
@@ -186,6 +167,39 @@ describe('Pix Controller Tests', () =>{
 
                expect(resposta.status).to.equal(400);
                expect(resposta.body).to.have.property('message', 'Insufficient balance.');
+      });
+
+      it('Quando realizo pagamento PIX com sucesso o retorno será 200', async () => {
+        await request(app)
+            .post('/users/register')
+            .send({ 
+                username: "pagadorPix", 
+                password: "123", 
+                pixKey: "55555555555"
+            });
+
+        await request(app)
+            .post('/users/register')
+            .send({ 
+                username: "recebedorPix", 
+                password: "321", 
+                pixKey: "66666666666"
+            });
+
+        // Adicionando saldo ao pagador e realizando PIX com sucesso para chave válida
+        const userRepository = require('../../repository/userRepository');
+        userRepository.updateBalance("pagadorPix", 100);
+        const resposta = await request(app)
+            .post('/pix/pay')
+            .send({ 
+                username: "pagadorPix", 
+                amount: 50, 
+                pixKey: "66666666666"
+            });
+
+        expect(resposta.status).to.equal(200);
+        expect(resposta.body).to.have.property('message', 'Payment successful.');
+
       });
     });
 });
